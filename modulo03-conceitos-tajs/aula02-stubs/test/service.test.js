@@ -6,7 +6,7 @@ describe('Service Test Suite', () => {
   let _service
   const filename = 'testefile.ndjson'
   beforeEach(() => {
-    _service = new Service(filename)
+    _service = new Service({filename})
   })
 
   describe('#read', () => {	
