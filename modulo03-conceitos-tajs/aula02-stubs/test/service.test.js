@@ -1,7 +1,6 @@
 import { expect, it, describe, beforeEach, jest } from '@jest/globals'
 import Service from '../src/service.js'
 import fs from 'node:fs/promises'
-import { exec } from 'node:child_process'
 
 describe('Service Test Suite', () => {
   let _service
@@ -52,8 +51,17 @@ describe('Service Test Suite', () => {
         expect(result).toEqual(expected)
     })
 
+    // // Dever de casa: Implementar teste para quando o arquivo não existir
+    // it('should return an empty array if the file does not exist', async () => {
+    //   jest.spyOn(
+    //     fs,
+    //     fs.readFile.name
+    //   )
+    //   .mockResolvedValue()
     
+    //   const result = await _service.read()
+    //   expect(result).toEqual([])
+    // })
 
-    // implementar teste para quando o arquivo não existir
   })
 })
