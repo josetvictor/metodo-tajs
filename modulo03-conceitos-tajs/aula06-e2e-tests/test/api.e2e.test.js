@@ -69,5 +69,41 @@ describe('E2E Test Suite', () => {
       const data = await response.json()
       expect(data.validationError).toEqual('cpf is required')
     })
+
+    it('should return 400 and missing file message whe name is null', async () => {
+      const invalidPerson = { cpf: '016.546.458-55' } // Missing name
+
+      const response = await fetch(`${_testServerAddress}/persons`, {
+        method: 'POST',
+        body: JSON.stringify(invalidPerson)
+      })
+      expect(response.status).toBe(400)
+      const data = await response.json()
+      expect(data.validationError).toEqual('name is required')
+    })
+
+    it('should return a person created', async () => {
+      const expectedPerson = {name: 'Fulano da silva', cpf: '016.444.485-77'}
+      const response = await fetch(`${_testServerAddress}/persons`, {
+        method: 'POST',
+        body: JSON.stringify(expectedPerson)
+      })
+      expect(response.status).toBe(200)
+      expect(response.statusText).toEqual('OK')
+    })
+
+    // it('should return 500 and console message', async () => {
+    //   const expectedPerson = {name: '', cpf: ''}
+    //   const response = await fetch(`${_testServerAddress}/persons`, {
+    //     method: 'POST',
+    //     body: JSON.stringify(expectedPerson)
+    //   })
+    //   expect(response.status).toBe(500)
+    //   // expect(response.statusText).toEqual('OK')
+    // })
   })
+
+  // describe('Teste person class', async () => {
+    
+  // })
 })
