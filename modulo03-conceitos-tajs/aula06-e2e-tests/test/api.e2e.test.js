@@ -1,4 +1,4 @@
-import { it, expect, describe, jest, beforeAll, afterAll } from '@jest/globals'
+import { it, expect, describe, beforeAll, afterAll, jest } from '@jest/globals'
 
 function waitForServerStatus(server) {
   return new Promise((resolve, reject) => {
@@ -8,6 +8,30 @@ function waitForServerStatus(server) {
 }
 
 describe('E2E Test Suite', () => {
+  describe('E2e Tests for server in a non-test env', () => {
+    it('should start server with PORT 4000', async () => {
+      const PORT = 4000
+      process.env.NODE_ENV = 'production'
+      process.env.PORT = PORT
+
+      jest
+        .spyOn(
+          console,
+          console.log.name
+        )
+
+      const { default: server } = await import('../src/index.js')
+      await waitForServerStatus(server)
+
+      const serverInfo = server.address()
+
+      expect(serverInfo.port).toBe(4000)
+      expect(console.log).toHaveBeenCalledWith(`Server is running at ${serverInfo.address}:${serverInfo.port}`)
+
+      return new Promise(resolve => server.close(resolve))
+    })
+  })
+
   describe('E2E Tests for Server', () => {
     let _testServer
     let _testServerAddress
@@ -23,7 +47,11 @@ describe('E2E Test Suite', () => {
       _testServerAddress = `http://localhost:${serverInfo.port}`
     })
 
-    afterAll(done => _testServer.close(done))
+    afterAll(async () => {
+      if (_testServer && _testServer.close) {
+        await new Promise(resolve => _testServer.close(resolve))
+      }
+    })
 
     it('should return 404 for unsupported routes', async () => {
       const response = await fetch(`${_testServerAddress}/unknown`, { method: 'POST' })
@@ -32,33 +60,14 @@ describe('E2E Test Suite', () => {
 
     it('should return 400 and missing file message whe body is invalid', async () => {
       const invalidPerson = { name: 'Fulando da silva' } // Missing cpf
-      const response = await fetch(`${_testServerAddress}/persons`, { method: 'POST', body: JSON.stringify(invalidPerson) })
+
+      const response = await fetch(`${_testServerAddress}/persons`, {
+        method: 'POST',
+        body: JSON.stringify(invalidPerson)
+      })
       expect(response.status).toBe(400)
-      // const data = await response.json()
-      // expect(data.validationError).toEqual('cpf is required')
-    })
-
-  })
-
-  describe('E2E Test for Server in a non-test env', () => {
-    it('should start server with PORT 4000', async () => {
-      const PORT = 4000
-      process.send.NODE_ENV = 'production'
-      process.env.PORT = PORT
-      jest
-        .spyOn(
-          console,
-          console.log.name
-        )
-
-      const { default: server } = await import('../src/index.js')
-      await waitForServerStatus(server)
-
-      const serverInfo = server.address()
-      expect(serverInfo.port).toBe(PORT)
-      expect(console.log).toHaveBeenCalledWith(`Server is running at ${serverInfo.address}:${PORT}`)
-
-      return new Promise(resolve => server.close(resolve))
+      const data = await response.json()
+      expect(data.validationError).toEqual('cpf is required')
     })
   })
 })
