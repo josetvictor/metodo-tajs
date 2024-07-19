@@ -2,7 +2,6 @@ import { Given, AfterAll } from '@cucumber/cucumber'
 import { server } from '../src/api.js'
 import sinon from 'sinon'
 
-
 let _testServer
 
 function waitForServerStatus(server) {
