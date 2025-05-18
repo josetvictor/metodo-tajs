@@ -14,3 +14,6 @@ Stubs é uma das principais especilizações de um mock, com stubs podemos simul
     - Você tem uma função que chama um serviço externo. Com os stubs, você substitui esse serviço por uma versão *falsa* que retorna um valor fixo, evitando a chamada real para esse serviço.
 
 Com isso nossos testes ganham performace e se matem no cerne dos testes unitarios que continuam funcionando independente do mundo externo.
+
+## Entendendo Spies
+
