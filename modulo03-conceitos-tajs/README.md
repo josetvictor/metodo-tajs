@@ -17,3 +17,13 @@ Com isso nossos testes ganham performace e se matem no cerne dos testes unitario
 
 ## Entendendo Spies
 
+Spies são funções que espionam outras funções durante a execução dos testes. Diferente dos stubs, que apenas retornam um valor pré-definido, spieses monitoram o comportamento, registrando informações como :
+
+- Se a função foi chamada
+- Quantas vezes foi chamada
+- Com quais argumentos
+- Qual valor retornou (dependendo da biblioteca)
+
+## Entendendo FakeTimers
+
+Assim como stubs, os FakeTimers fazem a simulação de algo, mas focado na passagem de tempo, então conseguimos simluar a passagem de tempo para realizar testes onde envolvam agendamentos ou validação de ação com passagem de tempo.
